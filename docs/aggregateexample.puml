@@ -1,0 +1,72 @@
+@startuml
+
+skinparam monochrome true
+
+class Customer <<entity>> {
+	+ identity : CustomerID
+	+ name : str
+	+ projects : list
+}
+
+class Employee <<entity>>{
+	+ identity : EmployeeID
+	+ name : str
+}
+
+package "aggregate boundary" <<Cloud>> {
+	class Project <<aggregate root>> {
+		+ identity : ProjectID
+		+ title : str
+		- tasks : list
+		- assignments : list
+		- maximum_tasks_for_project : int
+		- maximum_tasks_by_employee : int
+		+ add_task(title)
+		+ remove_task(task_number)
+		+ retrieve_all_tasks() : tuple
+		+ retrieve_tasks_for(employee) : tuple
+		+ assign_task(task_number, employee)
+	}
+	note bottom of Project {
+		The invariants related to the
+		maximum number of tasks are
+		enforced by the Project
+	}
+
+	class Task <<entity>> {
+		+ number : int
+		+ title : str
+	}
+
+	class Assignment <<value object>> {
+		+ employee : Employee
+		+ task : Task
+	}
+}
+
+Project "1" o- "*" Assignment
+Customer "1" o-- "*" Project
+Project "1" o-down- "*" Task
+
+Task "1" -- "1" Assignment
+Employee .. Assignment
+
+note left of Employee {
+	Employee is outside the
+	aggregate boundary and
+	should not hold a reference
+	to Assignment. The opposite
+	is permitted though.
+}
+
+note right of Customer {
+	Customer is outside the
+	aggregate boundary but
+	it can hold a reference
+	to an aggregate root
+	e.g. the Project entity
+}
+
+
+
+@enduml

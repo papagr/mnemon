@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="load: global-template.pt">
+<head>
+</head>
+<body>
+  <div metal:fill-slot="content">
+    <div class="navbar" role="navigation">
+      <a metal:use-macro="global_macros['bookmarklet']"></a>
+      <form metal:use-macro="global_macros['searchform']"></form>
+    </div>
+    <!-- Navigation Tabs -->
+    <ul metal:use-macro="global_macros['navtabs']"
+        tal:define="activetab view.tabs.active.name; itemcounts view.counts"></ul>
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <div class="tab-pane active">
+        <div class="well" tal:condition="not view.counts.archived">
+          There are no archived articles.
+        </div>
+        <div id="article-${item.id}"
+             class="well article" tal:repeat="item contents">
+          <a metal:use-macro="global_macros['favorite']"
+             tal:define="favorite item.is_favorite"></a>
+
+          <h4>${item.title} &nbsp; <a
+              href="${item.source}" title="Original Source" target="_blank"><span
+              class="glyphicon glyphicon-link"></span></a>
+          </h4>
+          <p class="pull-right">${item.memorised_on.strftime('%d/%m/%Y')}</p>
+          <!-- Tags -->
+          <p metal:use-macro="global_macros['tags']"
+             tal:define="article item"></p>
+          <p>${structure: item.content}...</p>
+          <p>
+            <a href="${request.route_path('article', article_id=item.id)}"
+               class="btn btn-primary">Read Now</a>
+            <a class="btn btn-default restore-article">Restore</a>
+            <a class="btn btn-danger pull-right delete-article">Delete</a>
+          </p>
+        </div>
+        <!-- Pager -->
+        <ul metal:use-macro="global_macros['paging']"></ul>
+      </div>
+    </div>
+  </div>
+  <script metal:fill-slot="script-extra" type="text/javascript">
+
+  </script>
+</body>
+</html>

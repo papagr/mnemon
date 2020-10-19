@@ -1,0 +1,47 @@
+@startuml
+
+skinparam monochrome true
+skinparam sequenceMessageAlign center
+autonumber "<b>#.</b>"
+hide footbox
+
+actor User
+participant WebBrowser
+participant WebServer
+participant MnemonizeApplicationService as MAS
+participant ArticleFactory as AF
+participant ArticleRepository as AR
+
+User ->> WebBrowser : Click Bookmarklet
+  note left of User
+    See Python in Practice for a Job Queue
+    Implementation in Python.
+  end note
+  note left of User
+    Maybe it is better to create a Job
+    Document in a Queue collection.
+  end note
+  note left of User
+    Where/How ArticleCreatedEvent is
+    being generated???
+    In Factory or Aggregate Constructor???
+    Do we need this event???
+  end note
+activate WebBrowser
+WebBrowser ->> WebServer : POST /queue
+  activate WebServer
+WebServer ->> MAS : mnemonize(url, title)
+  activate MAS
+MAS ->> AF : create(url, title)
+  activate AF
+AF -->> MAS : article
+  deactivate AF
+MAS ->> AR : save(article)
+  activate AR
+  deactivate AR
+  deactivate MAS
+WebServer -->> WebBrowser : 200 OK
+deactivate WebServer
+deactivate WebBrowser
+
+@enduml

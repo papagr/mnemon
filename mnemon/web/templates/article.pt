@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="load: global-template.pt">
+<head>
+</head>
+<body>
+  <div metal:fill-slot="content">
+    <div metal:fill-slot="content">
+      <div class="navbar" role="navigation">
+        <a id="back-to-list" class="btn btn-primary navbar-btn" href="#">Back</a>
+        <form metal:use-macro="global_macros['searchform']"></form>
+      </div>
+      <!-- Tab Content -->
+      <div id="article-${item.id}" class="well article">
+        <a metal:use-macro="global_macros['favorite']"
+          tal:define="favorite item.is_favorite"></a>
+
+        <h4>${item.title}&nbsp; <a href="${item.source}" title="Original Source"
+            target="_blank"><span class="glyphicon glyphicon-link"></span></a>
+        </h4>
+        <p class="pull-right">${item.memorised_on.strftime('%d/%m/%Y')}</p>
+        <!-- Tags -->
+        <p metal:use-macro="global_macros['tags']"
+           tal:define="article item"></p>
+        <p>${structure: item.content}</p>
+        <p>
+          <a class="btn btn-default archive-article-read ${'hidden' if not item.is_unread else ''}"
+            data-loading-text="Archiving...">Archive</a>
+          <a class="btn btn-default restore-article-read ${'hidden' if item.is_unread else ''}"
+            data-loading-text="Restoring...">Restore</a>
+          <a class="btn btn-danger pull-right delete-article-read ${'hidden' if item.is_deleted else ''}"
+             data-loading-text="Deleting...">Delete</a>
+          <a class="btn btn-danger pull-right purge-article-read ${'hidden' if not item.is_deleted else ''}"
+             data-loading-text="Purging...">Purge</a>
+        </p>
+      </div>
+    </div>
+    <script metal:fill-slot="script-extra" type="text/javascript">
+
+		</script>
+</body>
+</html>

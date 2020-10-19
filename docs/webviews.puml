@@ -1,0 +1,11 @@
+@startuml
+
+skinparam monochrome true
+
+package "web"
+  class ReadArticleView
+
+  ReadArticleView ..> application.MemorizePageContentService : «use»
+end package
+
+@enduml

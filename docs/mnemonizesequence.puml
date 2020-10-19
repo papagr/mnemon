@@ -1,0 +1,79 @@
+@startuml
+
+skinparam monochrome true
+skinparam sequenceMessageAlign center
+autonumber "<b>#.</b>"
+hide footbox
+
+actor User
+participant WebBrowser as WEB
+participant PyramidFramework as PYRAMID
+box "mnemon.web" #dddddd
+	participant HomePageView as VIEW
+end box
+box "mnemon.application" #cccccc
+	participant MemoriseArticleService as APPSERV
+end box
+box "mnemon.model" #eeeeee
+	participant ArticleSource as SOURCE
+	participant NewArticle as ARTICLE
+	participant ArticleRepository as REPO
+	participant ContentExtractService as EXTRACTOR
+end box
+
+User ->> WEB : Click Bookmarklet
+
+activate WEB
+WEB ->> PYRAMID : POST /
+
+activate PYRAMID
+PYRAMID ->> VIEW : post()
+
+activate VIEW
+VIEW ->> PYRAMID : requests service
+
+PYRAMID ->> PYRAMID : instantiates\n:MemoriseArticleService\nand its dependencies\n:MongoDBArticleRepository\n:Arc90ContentExtractService
+
+activate PYRAMID
+
+PYRAMID -->> VIEW : provides service
+
+deactivate PYRAMID
+
+VIEW ->> APPSERV : memorise(url)
+
+activate APPSERV
+
+create SOURCE
+APPSERV ->> SOURCE : creates
+APPSERV ->> REPO : next_identity()
+REPO -->> APPSERV : returns :ArticleID
+
+create ARTICLE
+APPSERV ->> ARTICLE : creates
+
+APPSERV ->> ARTICLE : extract_content(:ContentExtractService)
+
+activate ARTICLE
+ARTICLE ->> EXTRACTOR : extract_content(:ArticleSource)
+
+activate EXTRACTOR
+EXTRACTOR -->> ARTICLE : returns :Content
+deactivate EXTRACTOR
+
+ARTICLE ->> ARTICLE : transformed to\n:UnreadArticle
+activate ARTICLE
+deactivate ARTICLE
+deactivate ARTICLE
+
+APPSERV ->> REPO : save(:UnreadArticle)
+  activate REPO
+  deactivate REPO
+  deactivate APPSERV
+VIEW -->> PYRAMID : returns :Response
+PYRAMID -->> WEB : 200 OK
+  deactivate VIEW
+  deactivate PYRAMID
+  deactivate WEB
+
+@enduml

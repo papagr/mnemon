@@ -1,0 +1,18 @@
+@startuml
+package mnemon.application as APP {
+}
+package mnemon.model as MODEL {
+}
+package mnemon.persistence as DB {
+}
+package mnemon.services as SRV {
+}
+package mnemon.web as WEB {
+}
+
+WEB --> APP
+APP --> MODEL
+SRV -|> MODEL
+DB -|> MODEL
+
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+
+skinparam monochrome true
+
+package "messaging"
+  class JMSMessagingAdapter <<timer>>
+
+  JMSMessagingAdapter ..> persistence.MongoDBEventStore : «use»
+end package
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+
+skinparam monochrome true
+
+hide fields
+hide methods
+
+!include persistence.puml
+
+!include webviews.puml
+
+!include appservices.puml
+
+!include infraservices.puml
+
+!include domainmodel.puml
+
+@enduml

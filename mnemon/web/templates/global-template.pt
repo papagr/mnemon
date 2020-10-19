@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  tal:define="global_macros load:global-macros.pt">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<link rel="shortcut icon"
+  href="${request.static_url('mnemon:web/static/img/favicon.ico')}" />
+
+<title>Mnemon</title>
+
+<!-- Bootstrap core CSS -->
+<link
+  href="${request.static_url('mnemon:web/static/css/bootstrap.css')}"
+  rel="stylesheet" />
+<!-- Bootstrap Editable CSS -->
+<link
+  href="${request.static_url('mnemon:web/static/css/bootstrap-editable.css')}"
+  rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link
+  href="${request.static_url('mnemon:web/static/css/jumbotron-narrow.css')}"
+  rel="stylesheet" />
+<link
+  href="${request.static_url('mnemon:web/static/css/custom.css')}"
+  rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="${request.static_url('mnemon:web/static/js/html5shiv.js')}"></script>
+<script src="${request.static_url('mnemon:web/static/js/respond.min.js')}"></script>
+<![endif]-->
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li><a href="${request.route_path('unread')}">Home</a></li>
+        <li><a href="${request.route_path('logout')}">Logout</a></li>
+      </ul>
+      <h3 class="text-muted">
+        Mnemon
+      </h3>
+    </div>
+
+    <div metal:define-slot="content"></div>
+
+    <div class="footer">
+      <p>&copy; Mnemon 2013</p>
+    </div>
+  </div>
+  <!-- /container -->
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="${request.static_url('mnemon:web/static/js/jquery.min.js')}"></script>
+  <script src="${request.static_url('mnemon:web/static/js/bootstrap.min.js')}"></script>
+  <script src="${request.static_url('mnemon:web/static/js/bootstrap-editable.min.js')}"></script>
+  <script src="${request.static_url('mnemon:web/static/js/mnemon.js')}"></script>
+  <script metal:define-slot="script-extra"></script>
+</body>
+</html>

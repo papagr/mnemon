@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="${request.static_url('mnemon:web/static/img/favicon.ico')}">
+
+<title>Login to Mnemon</title>
+
+<!-- Bootstrap core CSS -->
+<link href="${request.static_url('mnemon:web/static/css/bootstrap.css')}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="${request.static_url('mnemon:web/static/css/login.css')}" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="${request.static_url('mnemon:web/static/js/html5shiv.js')}"></script>
+<script src="${request.static_url('mnemon:web/static/js/respond.min.js')}"></script>
+<![endif]-->
+</head>
+
+<body>
+
+  <div class="container">
+
+    <form action="${request.route_url('login')}"
+          class="form-signin" method="POST">
+      <h2 class="form-signin-heading">Please login</h2>
+      <div class="alert alert-danger" tal:condition='message'>${message}</div>
+      <input type="hidden" name="came_from" value="${came_from}"/>
+      <input type="text" name="username" class="form-control"
+        placeholder="Username" required autofocus> <input
+        type="password" name="password" class="form-control" placeholder="Password"
+        required>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    </form>
+
+  </div>
+  <!-- /container -->
+
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+</body>
+</html>

@@ -1,0 +1,54 @@
+@startuml
+
+skinparam monochrome true
+
+class ArchiveArticleService <<application service>> {
+	- repository : ArticleRepository
+	+ archive(article_id : str)
+}
+
+package "aggregate boundary" <<Cloud>> {
+
+  	abstract class Article {
+		+ id : ArticleID {readonly}
+		+ source : ArticleSource {readonly}
+		+ tags : Tag[] {readonly}
+		+ is_favorite : bool {readonly}
+		+ content : Content {readonly}
+  	}
+
+  	class UnreadArticle <<aggregate root>> {
+    	+ created_on : date {readonly}
+    	+ tags : Tag[] {editable}
+		+ is_favorite : bool {editable}
+    	+ archive()
+   		+ delete()
+  	}
+
+  	class Tag <<value object>> {
+  	}
+
+  	class ArticleSource <<value object>> {
+  	}
+
+  	class ArticleID <<value object>> {
+  	}
+
+  	class Content <<value object>> {
+    	+ title : str
+    	+ abstract: str
+    	+ body : str
+    	+ author : str
+   		+ extracted_on : date
+    	+ published_on : date
+  	}
+}
+
+ArchiveArticleService ---> UnreadArticle
+Article <|- UnreadArticle
+UnreadArticle "1" *-- "0..1" Content
+UnreadArticle "1" *-- "1" ArticleSource
+UnreadArticle "1" *- "1" ArticleID
+UnreadArticle "1" *-- "0..*" Tag
+
+@enduml

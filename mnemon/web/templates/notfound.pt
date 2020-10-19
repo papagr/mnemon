@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="load: global-template.pt">
+<head>
+</head>
+<body>
+  <div metal:fill-slot="content">
+    <div class="navbar" role="navigation">
+      <form metal:use-macro="global_macros['searchform']"></form>
+    </div>
+    <h1>Not Found!</h1>
+    <p>The requested URL ${request.path} was not found on this server.</p>
+  </div>
+</body>
+</html>

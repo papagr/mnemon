@@ -1,0 +1,43 @@
+@startuml
+
+skinparam monochrome true
+skinparam sequenceMessageAlign center
+autonumber "<b>#.</b>"
+hide footbox
+
+participant Scheduler as CRON
+participant MemoriseArticleView as VIEW
+participant MemorizeArticleService as APPSERV
+participant Article as ENTITY
+participant ArticleRepository as REPO
+participant ContentExtractorService as EXTRACTOR
+
+User ->> WEB : Click Bookmarklet
+  activate WEB
+WEB ->> VIEW : POST /
+  activate VIEW
+VIEW ->> APPSERV : memorise(url, title)
+  activate APPSERV
+create ENTITY
+APPSERV ->> ENTITY : new
+APPSERV ->> REPO : save(article)
+  activate REPO
+REPO -->> APPSERV : article
+  deactivate REPO
+APPSERV ->> ENTITY : extract_content(extractor)
+  activate ENTITY
+ENTITY ->> EXTRACTOR : content_from_url(url)
+  activate EXTRACTOR
+EXTRACTOR -->> ENTITY : content
+  deactivate EXTRACTOR
+  deactivate ENTITY
+APPSERV ->> REPO : save(article)
+  activate REPO
+REPO -->> APPSERV : article
+  deactivate REPO
+  deactivate APPSERV
+VIEW -->> WEB : 200 OK
+  deactivate VIEW
+  deactivate WEB
+
+@enduml

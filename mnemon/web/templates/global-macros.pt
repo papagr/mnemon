@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  metal:use-macro="load: global-template.pt">
+<head>
+</head>
+<body>
+    <!-- Bookmarklet -->
+    <metal:bookmarklet metal:define-macro="bookmarklet">
+    <?python from mnemon.web.utils import bookmarklet_minified?>
+    <?python from mnemon.web.utils import get_security_token?>
+    <a id="bookmarklet" class="btn btn-success navbar-btn"
+       data-name="${get_security_token(request)}"
+       data-url="${request.route_url('home')}"
+       href="${bookmarklet_minified(request)}">
+      Mnemonize
+    </a>
+    </metal:bookmarklet>
+
+    <!-- Search Form -->
+    <metal:searchform metal:define-macro="searchform">
+    <form class="navbar-form navbar-right"
+          action="${request.route_path('search')}"
+          role="search">
+      <div class="form-group">
+        <input class="form-control" placeholder="Search"
+               type="text" name="query"
+               value="${request.GET.get('query', '')}">
+      </div>
+      <button type="submit" class="btn btn-default">
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </form>
+    </metal:searchform>
+
+    <!-- paging -->
+    <metal:paging metal:define-macro="paging">
+    <ul class="pager">
+        <li tal:define="previous contents.older_page"
+            tal:condition="previous"
+            class="previous">
+            <a href="${request.path}?page=${previous.number}">&larr; Older</a></li>
+        <li tal:define="next contents.newer_page"
+            tal:condition="next"
+            class="next">
+            <a href="${request.path}?page=${next.number}">Newer &rarr;</a></li>
+      </ul>
+    </metal:paging>
+
+    <!-- Navigation Tabs -->
+    <metal:navtabs metal:define-macro="navtabs">
+    <a id="purge-all"
+       class="btn btn-danger pull-right ${'hidden' if activetab != 'DELETED' else ''}">Purge All</a>
+    <ul class="nav nav-tabs">
+      <li id="unread-tab"
+          tal:attributes="class 'active' if activetab == 'UNREAD' else None">
+        <a href="${request.route_path('unread') if activetab != 'UNREAD' else None}">
+          Reading List &nbsp; <span class="badge unread-count">${itemcounts.unread}</span></a></li>
+      <li id="favorites-tab"
+          tal:attributes="class 'active' if activetab == 'FAVORITES' else None">
+        <a href="${request.route_path('favorites') if activetab != 'FAVORITES' else None}">
+          Favorites &nbsp; <span class="badge favorites-count">${itemcounts.favorites}</span>
+      </a></li>
+      <li id="archived-tab"
+          tal:attributes="class 'active' if activetab == 'ARCHIVED' else None">
+        <a href="${request.route_path('archived') if activetab != 'ARCHIVED' else None}">
+          Archived &nbsp; <span class="badge archived-count">${itemcounts.archived}</span>
+      </a></li>
+      <li id="deleted-tab"
+          tal:attributes="class 'active' if activetab == 'DELETED' else None">
+        <a href="${request.route_path('deleted') if activetab != 'DELETED' else None}">Deleted
+          &nbsp; <span class="badge deleted-count">${itemcounts.deleted}</span>
+      </a></li>
+    </ul>
+    </metal:navtabs>
+
+    <!-- Favorite -->
+    <metal:favorite metal:define-macro="favorite">
+    <a class="favorite-article pull-right" href="#"
+       title="Remove from favorites"
+       tal:condition="favorite"><span
+      class="glyphicon glyphicon-star-lg glyphicon-star gold"></span>
+    </a>
+    <a class="favorite-article pull-right" href="#"
+       title="Add to favorite"
+       tal:condition="not favorite"><span
+      class="glyphicon glyphicon-star-lg glyphicon-star-empty grey"></span>
+    </a>
+    </metal:favorite>
+
+    <!-- Tags -->
+    <metal:tags metal:define-macro="tags">
+    <p>
+      tags:
+      <span class="article-tags" id="article-tags-${article.id}"
+            data-url="${request.route_url('article-tags', article_id=article.id)}"
+            data-pk="${article.id}"
+            data-value="${', '.join(article.tags)}">
+      </span>
+      &nbsp;
+      <a id="article-tag-edit-${article.id}"
+         title="Edit Tags"
+         class="tag-article ${'hidden' if article.is_deleted else ''}"
+         data-editable="article-tags-${article.id}" href="#">
+        <span class="glyphicon glyphicon-edit"></span>
+      </a>
+    </p>
+    </metal:tags>
+</body>
+</html>

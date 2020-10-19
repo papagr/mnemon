@@ -1,0 +1,22 @@
+@startuml
+
+skinparam monochrome true
+
+abstract class ArticleRepository <<repository>> {
+    + next_identity() -> ArticleID
+    + get(article_id : ArticleID) -> Article
+    + find_unread() -> Article[]
+    + find_archived() -> Article[]
+    + find_deleted() -> Article[]
+    + find_favorites() -> Article[]
+    + find_by_tag(tag : Tag) -> Article[]
+    + find_by_query(query : str) -> Article[]
+    + count_unread() -> int
+    + count_favorites() -> int
+    + count_archived() -> int
+    + count_deleted() -> int
+    + save(article : Article)
+    + purge(article : Article)
+  }
+
+@enduml

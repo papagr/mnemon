@@ -1,0 +1,18 @@
+@startuml
+
+skinparam monochrome true
+
+' NEW state todo: system tries to download article for #number of times
+' and if it fails the article transits to Unread state (Reading List)
+' with No content
+
+[*] --> NewArticle : memorise
+NewArticle --> UnreadArticle : extract_content
+UnreadArticle --> ArchivedArticle : archive
+UnreadArticle --> DeletedArticle : delete
+ArchivedArticle --> UnreadArticle : restore
+ArchivedArticle --> DeletedArticle : delete
+DeletedArticle --> UnreadArticle : restore
+DeletedArticle --> [*] : purge
+
+@enduml

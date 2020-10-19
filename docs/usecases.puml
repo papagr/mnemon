@@ -1,0 +1,47 @@
+@startuml
+
+skinparam monochrome true
+left to right direction
+
+actor User
+
+rectangle Mnemon {
+  (<i>Find Article</i>)   as (Find Article)
+  (<i>Read Article</i>)   as (Read Article)
+  (<i>Manage Article</i>) as (Manage Article)
+
+  User -- (Read Original Article)
+  User -- (Read Saved Article)
+  User -- (Search Article)
+  User -- (Browse Article)
+  User -- (Tag Article)
+  User -- (Archive Article)
+  User -- (Delete Article)
+  User -- (Purge Article)
+  User -- (Restore Article)
+  User -- (Favorise Article)
+  User -- (Memorise Article)
+  User -- (Logout)
+
+  (Read Original Article) --|> (Read Article)
+  (Read Saved Article)    --|> (Read Article)
+
+  (Search Article)        --|> (Find Article)
+  (Browse Article)        --|> (Find Article)
+
+  (Tag Article)           --|> (Manage Article)
+  (Archive Article)       --|> (Manage Article)
+  (Delete Article)        --|> (Manage Article)
+  (Restore Article)       --|> (Manage Article)
+  (Favorise Article)      --|> (Manage Article)
+  (Purge Article)         --|> (Manage Article)
+
+  (Read Article)   <.  (Find Article)  : «extend»
+  (Manage Article) .>  (Find Article)  : «extend»
+
+  (Memorise Article)    ...> (Login) : «include»
+  (Manage Article)       ..> (Login) : «include»
+  (Find Article)         ..> (Login) : «include»
+  (Read Article)         ..> (Login) : «include»
+}
+@enduml

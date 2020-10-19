@@ -1,0 +1,49 @@
+ .tab-content {
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+}
+
+ .tab-browse {
+ 	border-top: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+}
+
+
+.tab-pane {
+	padding: 12px;
+}
+
+.navbar-form {
+	padding-right: 0px;
+}
+
+.gold {
+	color: #FFD700;
+}
+
+.grey {
+	color: #AAAAAA;
+}
+
+.glyphicon-star-lg {
+  padding: 8px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+}
+
+a.favorite-article:focus {
+	outline: none;
+}
+
+#bookmarklet .editable-click, a.editable-click, a.editable-click:hover {
+    text-decoration: none;
+    border-bottom: 1px solid rgb(76, 174, 76);
+}
+
+.article img {
+	display: block;
+	margin: 0px auto;
+}

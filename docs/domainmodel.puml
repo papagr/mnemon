@@ -1,0 +1,104 @@
+@startuml
+
+skinparam monochrome true
+
+package mnemon.model
+
+  class Tag <<value object>> {
+  }
+
+  class ArticleSource <<value object>> {
+  }
+
+  class ArticleID <<value object>> {
+  }
+
+  abstract class ArticleFinder {
+  	+ unread(skip=0, limit=0) -> Article[]
+  	+ archived(skip=0, limit=0) -> Article[]
+  	+ deleted(skip=0, limit=0) -> Article[]
+  	+ favorites(skip=0, limit=0) -> Article[]
+  	+ annotated_by(tag, skip=0, limit=0) -> Article[]
+  	+ search_by(query, skip=0, limit=0) -> Article[]
+  }
+
+  abstract class ArticleCounter {
+  	+ unread() -> int
+  	+ favorites() -> int
+  	+ archived() -> int
+  	+ deleted() -> int
+  }
+
+  abstract class ArticleRepository <<repository>> {
+    + find : ArticleFinder
+    + count : ArticleCounter
+    + next_identity() -> ArticleID
+    + get(article_id : ArticleID) -> Article
+    + save(article : Article)
+    + purge(article : Article)
+    + purge_all()
+    + purge_older_than(days : int)
+  }
+
+  abstract class Article {
+    + id : ArticleID {readonly}
+	+ source : ArticleSource {readonly}
+	+ tags : Tag[] {readonly}
+	+ is_favorite : bool {readonly}
+	+ content : Content {readonly}
+  }
+
+  class NewArticle <<entity>> {
+	+ extract_content(content_extractor : ContentExtractService)
+  }
+
+  class UnreadArticle <<entity>> {
+    + created_on : date {readonly}
+    + tags : Tag[] {editable}
+	+ is_favorite : bool {editable}
+    + archive()
+   	+ delete()
+  }
+
+  class ArchivedArticle  <<entity>>{
+    + archived_on : date {readonly}
+    + tags : Tag[] {editable}
+	+ is_favorite : bool {editable}
+    + restore()
+    + delete()
+  }
+
+  class DeletedArticle <<entity>> {
+    + deleted_on : date {readonly}
+    + restore()
+  }
+
+  class Content <<value object>> {
+    + title : str
+    + abstract: str
+    + body : str
+    + author : str
+    + extracted_on : date
+    + published_on : date
+  }
+
+  abstract class ContentExtractService <<service>> {
+    + {abstract} extract_content(source : ArticleSource) -> Content
+  }
+
+  ArticleRepository o- "0..*" Article
+  Article "1" *-- "0..1" Content
+  Article "1" *- "1" ArticleSource
+  Article "1" *-- "1" ArticleID
+  Article "1" *-- "0..*" Tag
+  Article <|--- NewArticle
+  Article <|--- UnreadArticle
+  Article <|--- ArchivedArticle
+  Article <|--- DeletedArticle
+  NewArticle --> ContentExtractService
+  ArticleRepository --> ArticleFinder
+  ArticleRepository --> ArticleCounter
+
+end package
+
+@enduml

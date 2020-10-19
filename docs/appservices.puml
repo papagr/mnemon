@@ -1,0 +1,85 @@
+@startuml
+
+skinparam monochrome true
+
+package mnemon.application
+	class MemoriseArticleService <<application service>> {
+	    - content_extractor : ContentExtractService
+		- repository : ArticleRepository
+		+ memorise(url : str)
+	}
+
+	class ReadArticleService <<application service>> {
+		- repository : ArticleRepository
+  		+ read_article(article_id : str) -> FullArticle
+  		+ read_unread_articles(page_number : int) -> ArticleList[AbstractArticle]
+  		+ read_favorite_articles(page_number : int) -> ArticleList[AbstractArticle]
+  		+ read_archived_articles(page_number : int) -> ArticleList[AbstractArticle]
+  		+ read_deleted_articles(page_number : int) -> ArticleList[AbstractArticle]
+  		+ follow(tag_name : str, page_number : int) -> ArticleList[AbstractArticle]
+ 	    + search(query : str, page_number : int) -> ArticleList[AbstractArticle]
+ 		+ count_unread_articles() -> int
+ 		+ count_favorite_articles() -> int
+ 		+ count_archived_articles() -> int
+ 		+ count_deleted_articles() -> int
+ 	}
+
+	class ManageArticleService <<application service>> {
+		- repository : ArticleRepository
+		+ tag(article_id : str, tags : str[])
+		+ archive(article_id : str)
+		+ favorise(article_id : str)
+		+ unfavorise(article_id : str)
+		+ delete(article_id : str)
+		+ restore(article_id : str)
+		+ purge(article_id : str)
+		+ purge_all()
+		+ purge_older_than(days : int)
+	}
+
+	class Page {
+		+ number : int
+		+ size : int
+		+ skipped : int
+		+ total : int
+		+ next : Page
+		+ previous : Page
+	}
+
+	class ArticleList <<list>> {
+		+ older_page : Page
+		+ newer_page : Page
+	}
+
+	abstract class ArticleRepresentation {
+		+ id : str
+		+ source : str
+		+ title : str
+		+ {abstract} content : str
+		+ memorised_on : date
+		+ tags : str[]
+		+ is_unread : bool
+		+ is_favorite : bool
+		+ is_archived : bool
+		+ is_deleted : bool
+	}
+
+	class AbstractArticle {
+		+ content : str
+	}
+
+	class FullArticle {
+		+ content : str
+	}
+
+    ReadArticleService --> ArticleList
+    ReadArticleService --> FullArticle
+	' ArticleRepresentation <|-- AbstractArticle
+	' ArticleRepresentation <|-- FullArticle
+	AbstractArticle --|> ArticleRepresentation
+	FullArticle --|> ArticleRepresentation
+	ArticleList <-- Page
+
+end package
+
+@enduml

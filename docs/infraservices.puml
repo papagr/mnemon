@@ -1,0 +1,14 @@
+@startuml
+
+skinparam monochrome true
+
+package services
+  class Arc90ContentExtractor {
+  }
+
+  Arc90ContentExtractor ---|>  model.ContentExtractService
+
+
+end package
+
+@enduml

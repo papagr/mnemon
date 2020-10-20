@@ -40,8 +40,7 @@ class MongoDBArticleRepository(ArticleRepository):
 
     def save(self, article):
         key, document = self.__document_factory(article)
-        self.__collection.update(key, {'$set': document},
-                                 upsert=True, safe=True)
+        self.__collection.update(key, {'$set': document}, upsert=True)
 
     def purge(self, article_id):
         spec = {'type': 'DeletedArticle',
@@ -134,14 +133,10 @@ class MongoDBArticleFinder(ArticleFinder):
         return list(map(self.__factory, cursor))
 
     def search_by(self, query, skip=0, limit=0):
-        db = self.__collection.database
-        found = db.command('text', 'articles',
-            search=query,
-            filter={'type': {'$ne': 'DeletedArticle'}},
-            project={'content.body': 0},
-            )
-        docs = [self.__factory(res['obj']) for res in found['results']]
-        return docs
+        spec = {'type': {'$ne': 'DeletedArticle'}, '$text': {"$search": query}}
+        fields = {'content.body': 0}
+        cursor = self.__collection.find(spec, fields, skip, limit)
+        return list(map(self.__factory, cursor))
 
     def _sorted(self, cursor):
         return cursor.sort('transformed_on', pymongo.DESCENDING)

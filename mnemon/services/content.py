@@ -89,7 +89,7 @@ class Arc90ContentTranslator(object):
         # pre-process the text
         html_text = self._treat_breaks(html_text)
         # create the parser
-        soup = BeautifulSoup(html_text)
+        soup = BeautifulSoup(html_text, features="html5lib")
         # initial cleaning of the document
         self._clean_document(soup)
         # weight elements
@@ -203,7 +203,7 @@ class Arc90ContentTranslator(object):
 
 
 def rss_to_content(rss_text):
-    soup = BeautifulSoup(rss_text)
+    soup = BeautifulSoup(rss_text, features="html5lib")
     item = soup.find_all('item')[0]
     title = item.title.text
     body = item.find('content:encoded').text

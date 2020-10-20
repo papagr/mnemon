@@ -1,21 +1,16 @@
 import os
 
+from pip._internal.req import parse_requirements
+from pip._internal.network.session import PipSession
+
 from setuptools import setup, find_packages
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(HERE, 'README.md')).read()
 
-requires = [
-    'pyramid==1.4.5',
-    'beautifulsoup4',
-    'pyramid_debugtoolbar',
-    'pyramid_debugtoolbar_mongo',
-    'waitress',
-    'pymongo',
-    'rfc3987',
-    'requests',
-    'apscheduler',
-    ]
+requirements = parse_requirements(os.path.join(HERE, 'requirements.txt'),
+                                  session=PipSession())
+requires = [str(req.requirement) for req in requirements]
 
 setup(name='Mnemon',
       version='0.6.0',
@@ -29,7 +24,7 @@ setup(name='Mnemon',
         ],
       author='Nikolaos Papagrigoriou',
       author_email='nikolaos@papagrigoriou.com',
-      url='http://mnemon.eu',
+      url='https://mnemon.eu',
       keywords='web pyramid pylons mnemon',
       packages=find_packages(),
       include_package_data=True,

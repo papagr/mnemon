@@ -13,7 +13,7 @@ requirements = parse_requirements(os.path.join(HERE, 'requirements.txt'),
 requires = [str(req.requirement) for req in requirements]
 
 setup(name='Mnemon',
-      version='0.6.0',
+      version='0.6.1',
       description='Mnemon',
       long_description=README,
       classifiers=[

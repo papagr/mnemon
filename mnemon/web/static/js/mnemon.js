@@ -37,8 +37,12 @@ $("#bookmarklet").editable({
 	value : "",
 	title : "Add an article to your reading list",
 	success : function(response, value) {
+		setTimeout(function() {
+			//$("#bookmarklet").editable("option", "value", "");
+			location.reload(true);
+		 }, 0);
 		// TODO: show message alert on success
-		// TODO: update the UI accordingly e.g.:
+		// TODO: update the UI accordingly without a page reload e.g.:
 		//       * increase unread counter
 		//       * show new entry in unread list if visible
 	},

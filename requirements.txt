@@ -1,5 +1,6 @@
 apscheduler==2.1.1
 beautifulsoup4==4.9.3
+html5lib==1.1
 Mako==0.9.0
 MarkupSafe==0.19
 PasteDeploy==1.5.0

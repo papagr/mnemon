@@ -4,6 +4,7 @@ html5lib==1.0.1
 Mako==0.9.0
 MarkupSafe==0.19
 minimock
+nose
 PasteDeploy==1.5.0
 pymongo==3.11.0
 pyramid_debugtoolbar_mongo==0.1.6
